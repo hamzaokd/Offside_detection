@@ -9,7 +9,7 @@ My idea is to work on a still image of a TV broadcast of a football match follow
 I will discuss each step separately
 
 ## Type of photos i will be working on
-For now, I will be working on a single frame, possibly [this](https://www.github.com/hamzaokd/Offside_detection/media/goal.jpg).\
+For now, I will be working on a single frame, possibly [this](https://github.com/hamzaokd/Offside_detection/blob/main/media/goal.jpg).\
 I choose this picture because i already know the dimensions of the field, so the work will be easier. 
 
 
