@@ -28,13 +28,13 @@ there are 2 ways to get the position of a player:
 1. Manually click the feets of all the players (manual, not intersting)
 2. Automatically getting the feet positions( what i wanted to achieve but a bit tricky)
  ## Identification of the players teams
-This is the hardest step. I was thinking about some sort of clustering, but i dont think it will work. What if the user had the possibility to pick the color of each team jersey and we then get some algorithm to get the players. \
-Or maybe just enter it manually, but i dont like doing things that way. \
-I will look for some sort of deep learning model to get this step right. Will work manually for now. 
+This is the hardest step. I was thinking about some sort of clustering, then classification. But What if the user had the possibility to pick the color of each team jersey and we then get some algorithm to get the players. \
+Or maybe just enter it manually. \
+I can also look for some sort of deep learning model to get this step right.but its gonna be the hardest way. 
 
 ## Ball position
 The position of the ball is very important, because offside rules depends a lot on it (if it was the last after every attacker)
 ## Check for offside
-After all these steps, this gonna be the easiest way, we will just compare the "minimum" $x$ coordinate of each team. \
-I will not study the edges cases, like goalkeeper before last defender, or ball in other center of half of the field. 
+After all these steps, this gonna be the easiest one, we will just compare the "minimum" $x$ coordinate of each team. \
+For now,I will not study the edges cases, like goalkeeper before last defender, or ball in other center of half of the field. 
 
