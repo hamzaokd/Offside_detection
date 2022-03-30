@@ -1,4 +1,5 @@
 # Detection of offsides in football
+[current notebook](https://github.com/hamzaokd/Offside_detection/blob/main/yolo_person.ipynb)
 ## Goal 
 My idea is to work on a still image of a TV broadcast of a football match following these steps: 
 * calibrate the camera to the field to get 3d world coordinate
