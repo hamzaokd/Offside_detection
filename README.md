@@ -19,7 +19,7 @@ I'm planing to make my program work on pictures but the problem is i will have t
 ## Calibration of the camera
 On a single frame, this step is quite easy, i'll be using some OpenCV functions to detect the corners and goal, to get the intrinsic coordinates of the camera. This will allow me to get the positions of a player in the real world from the position of it's corresponding pixel. 
 
-To make this work for other images, maybe i can make it work by not making the user pick the the center of the reference frame (which usually will be center of the goal line) 
+To make this work for other images, maybe i can ask the user to pick the the center of the reference frame (which usually will be center of the goal line) 
 
 ## Get position of the player
 Usually, players have at least one foot on the ground, So, their positions on the field is the postion of the feet (but which foot we will choose).
