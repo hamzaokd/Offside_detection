@@ -42,15 +42,15 @@ U_im = U_im/U_im[2,:]
 # To obtain M', we need to remove the second line of the matrix M which correspond to y
 M_prime = M[:,[0,2,3]]
 # print(M_prime.shape)
-img=mpimg.imread('media/goal.jpg')
+# manual player position
+#img=mpimg.imread('media/goal.jpg')
 def get_player_position(pos):
      
     u_im = np.vstack((np.transpose(pos),np.ones(len(pos))))
     # print(u_im[:2])
     # print(u_im.shape)
-    plt.imshow(img)
-    plt.scatter(u_im[0,:],u_im[1,:])
-    plt.show()
+
+    return u_im
 
 data=[]
 with open("GFG.csv") as csvfile:
@@ -60,32 +60,46 @@ with open("GFG.csv") as csvfile:
         x = int(row[0])
         y = int(row[1])
         data.append([x,y])
-u_im=np.array(data)
-get_player_position(u_im)
+u_imm=np.array(data)
+u_im=get_player_position(u_imm)
+
 
 
 #To get the real position of the players, we invert $M'$ <br>
 #we already know that $M'$ is invertible. So:
 M_inv = np.linalg.inv(M_prime)
 U_w=np.dot(M_inv,u_im)
-print(np.shape(U_w))
+# print(np.shape(U_w))
 #To pass from homogenious coordinates to cartesian coordinates, we divide by the last coordinate. <br>
 #We then have to add the coordinate corresponding to y which equals to 0
 U_w = U_w/U_w[2,:]
 U=U_w[:1]
-U=np.vstack((U,np.zeros(11)))
+U=np.vstack((U,np.zeros(len(u_imm))))
 U=np.vstack((U,U_w[1:,]))
 U_w=U
-print(U_w[:3])
-
-U_sim=np.dot(M,U_w)
-U_sim = U_sim/U_sim[2,:]
-
-img=mpimg.imread('goal.jpg')
-plt.imshow(img)
-plt.scatter(U_sim[0,:],U_sim[1,:])
-plt.show()
+# print(U_w[:3])
+# U_w=U_w[:,1:3]
+def get_positions(M,U_w):
+    U_sim=np.dot(M,U_w)
+    U_sim = U_sim/U_sim[2,:]
+    return U_sim
+U_sim=get_positions(M,U_w)
 
 
-for i in range(1,12):
-    print(f'Position of the player {ascii_uppercase[i-1]} : x = {np.round(U_w[0][i-1],2)} , y = {np.round(U_w[1][i-1],2)} , z = {np.round(U_w[2][i-1],2)}')
+def show_players(U_sim):
+    global U_w
+    img=mpimg.imread('media/goal.jpg')
+    plt.imshow(img)
+    plt.scatter(U_sim[0,:],U_sim[1,:])
+
+    for i in range(1,np.shape(U_w)[1]+1):
+        print(f'Position of the player {ascii_uppercase[i-1]} : x = {np.round(U_w[0][i-1],2)} , y = {np.round(U_w[1][i-1],2)} , z = {np.round(U_w[2][i-1],2)}')
+        #plt.text(U_sim[0,i-1],U_sim[1,i-1],ascii_uppercase[i-1])
+        
+
+    plt.show()
+# show_players(U_sim)
+# print(U_w[0,np.shape(U_w)[1]]-1)
+# print(np.shape(U_w))
+
+
