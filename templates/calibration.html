@@ -12,24 +12,40 @@
             </nav>
             <div>
                 <h2>How to calibrate the image</h2>
-                <img src="{{'uploads/field.jpg'}}" id="mainimage" />
+                <img src="{{'static/images/field.jpg'}}" id="mainimage" />
                 <div id="coor1"></div>
-                <script type="text/javascript">
+                <script type="text/javascript">                    
+                    const fs = require('fs')
+                    var pts =0;                    
                     var coor= [];
-                
-                    $('#mainimage').click(function(e)
-                    {   
-                        var offset_t = $(this).offset().top - $(window).scrollTop();
-                        var offset_l = $(this).offset().left - $(window).scrollLeft();
+                    alert("click 4 points on the field");
+                    while (pts<4){                
+                        $('#mainimage').click(function(e)
+                        {   
+                            var offset_t = $(this).offset().top - $(window).scrollTop();
+                            var offset_l = $(this).offset().left - $(window).scrollLeft();
 
-                        var left1 = Math.round( (e.clientX - offset_l) );
-                        var top1 = Math.round( (e.clientY - offset_t) );
-                        // document.getElementById("coor1").innerHTML= coor;
-                        // document.getElementById("coor1").innerHTML= "("+left1+","+top1+")";
-                        coor.push([left1,top1]);
-                    });
-                    let c =coor.toString();
-                    document.getElementById("coor1").innerHTML= c;
+                            var left1 = Math.round( (e.clientX - offset_l) );
+                            var top1 = Math.round( (e.clientY - offset_t) );
+                            // document.getElementById("coor1").innerHTML= coor;
+                            coor.push([left1,top1]);
+                        });
+                        pts++;
+                    }
+                    alert("done")
+                    // write to js file
+
+                        
+
+                        fs.writeFile('static/files/coord.txt', coor, err => {
+                        if (err) {
+                            console.error(err)
+                            return
+                        }
+                        //file written successfully
+                        })
+                    // let c =coor.toString();
+                    // document.getElementById("coor1").innerHTML= coor;
                 </script>
                 
             </div>
