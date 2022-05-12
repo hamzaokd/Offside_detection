@@ -2,17 +2,26 @@
 
 <html>
     <head>
-
+        <title>Offside detection</title>
+        <link rel="stylesheet" href="static/css/style.css?v=1.0.0">
     </head>
     <body>
-        <h1 id="title">Offside detection</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">New detection</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </nav>
-        <div>
+        <main class="main">
+            <aside class="sidebar">
+            
+                <nav class="nav">
+                    <ul class="active">
+                        <li><a href="{{ url_for('index')}}">New detection</a></li>
+                        <li><a href="{{url_for('about')}}">About</a></li>
+                    </ul>
+                </nav>
+            </aside>
+          
+            <section class="page">
+                <div class="container">
+                    <h1 id="title">Offside detection</h1>
+                    
+
             <form method="post" enctype="multipart/form-data">
                 <label for="file">Select file to upload:</label>
                 <input type="file" id="image" name="file1"> <br>
@@ -20,6 +29,10 @@
                 
                 </form>
      
-        </div>
+        
+                </div>
+            </section>
+
+            </main>
     </body>
 </html>

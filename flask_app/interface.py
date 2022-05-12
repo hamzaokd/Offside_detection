@@ -5,9 +5,11 @@ import time
 import numpy as np
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from offside_detection import *
+from identification import get_field_positions
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from PIL import Image
+import offs
 
 
 UPLOAD_FOLDER = 'flask_app/static/user_input'
@@ -58,7 +60,6 @@ def upload_file():
             rgb_im = im.convert("RGB")
             npath=os.path.join(app.config['UPLOAD_FOLDER'], "user_image.jpg")
             rgb_im.save(npath)
-            time.sleep(5)
             print(npath)
             
             
@@ -99,10 +100,6 @@ def cali():
         return redirect("offside.html")
     return render_template("calibration.html")
 
-# def get_coor(field,user):
-#     global f,u
-#     f=field
-#     u=user
 def get_coord(f, u):
     f_coord = f.split(",")
     u_coord = u.split(",")
@@ -114,11 +111,20 @@ def get_coord(f, u):
 @app.route("/offside.html", methods=["GET", "POST"])
 def offside():
     global coord
-    print("cord",coord)
-    #coor=get_coord(coord[0], coord[1])
-    M,U_w,U_sim=get_positions(coord)
-    calibrate(M,U_w)
-    return "done"
+    get_field_positions("flask_app/static/user_input/user_image.jpg") #imported from identification.py
+    offs.get_offsides(coord)
+    return render_template("offside.html",f_coord=coord)
+
+@app.after_request
+def add_header(response):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'public, max-age=0'
+    return response
 
 if __name__ == '__main__':
+    app.debug = True
     app.run()

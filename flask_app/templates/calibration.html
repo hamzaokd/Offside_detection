@@ -1,17 +1,27 @@
 <html>
     <head>
+        <title>Offside detection</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
         <link rel="stylesheet" href="static/css/style.css?v=1.0.0">
     </head>
-        <body>
-            <h1 id="title">Offside detection</h1>
-            <nav>
-                <ul>
+    <main class="main">
+        <aside class="sidebar">
+        
+            <nav class="nav">
+                <ul class="active">
                     <li><a href="{{ url_for('index')}}">New detection</a></li>
-                    <li><a href="about.html">About</a></li>
+                    <li><a href="{{url_for('about')}}">About</a></li>
                 </ul>
             </nav>
+        </aside>
+      
+        <section class="page">
+            <div class="container">
+                <h1 id="title">Offside detection</h1>
+                
+
+    
             <div>
                 <h2>How to calibrate the image</h2>
                 {% if feedback %}
@@ -19,7 +29,7 @@
                 {% endif %}
                 <div class='parent'>
                     <div class='child'>
-                        <img src="{{'static/images/field.jpg'}}" id="field" height="200px" width=auto />
+                        <img src="{{'static/images/field.jpg'}}" id="field" height="400px" width=auto />
                         <h4>Field coordinates</h4>
                         <p id="field_coor"></p>
             <form method="post" enctype="multipart/form-data">
@@ -30,7 +40,7 @@
                     </div>
                     <div class='child'>
                         <!-- <img src="{{'static/user_input/'}}{{file1}}" id="user_input" width="400px" height=auto /> -->
-                        <img src="static/user_input/user_image.jpg" id="user_input" height="200px" width=auto />
+                        <img src="static/user_input/user_image.jpg" id="user_input" height="400px" width=auto />
                         <h4>User coordinates</h4>
                         <p id="user_img_coor"></p>
                             <label>The user points coordinates</label>
@@ -60,7 +70,7 @@
                         var top = Math.round( (e.clientY - offset_t) );
                         if (field_pts<4){
                         field_coor.push([left,top]);
-                        alert("Left: "+field_coor);
+                        // alert("Left: "+field_coor);
                         field_pts++;
                         }
                         else{
@@ -84,7 +94,7 @@
                         var top = Math.round( (e.clientY - offset_t) );
                         if (user_pts<4){
                         user_coor.push([left,top]);
-                        alert("Left: "+user_coor);
+                        // alert("Left: "+user_coor);
                         user_pts++;
                         }
                         else{
@@ -107,7 +117,8 @@
                         }
 
                 </script>
-                
-                
+            </div>
+            </section>
+        </main>  
         </body>
 </html>
