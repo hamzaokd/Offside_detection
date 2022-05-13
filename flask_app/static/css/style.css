@@ -248,8 +248,10 @@ background: linear-gradient(to right, #0ABFBC, #FC354C);
 }
 
 
-.text-danger float-right{
-  color:red;
+.text-danger{
+  color:whitesmoke;
+  background-color: #c21500;
+  
 }
 .parent {
     display: flex;

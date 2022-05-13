@@ -1,28 +1,38 @@
+"""
+identify players in the image .
+author:Hamza Oukaddi
+"""
+
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from PIL import Image
-import pandas as pd
 import csv
+from PIL import Image
 
-from matplotlib import colors
-from sklearn.cluster import KMeans
-from sklearn import svm
-from skimage.color import rgb2gray, rgb2hsv, hsv2rgb
-from mpl_toolkits.mplot3d import Axes3D
+
 
 # Open image
 image_path="flask_app/static/user_input/user_image.jpg"
 img = plt.imread(image_path)
 
 def get_field_positions(im):
+    """Identify peoples (players and people standing by) in the image
+    and write their positions to a csv file. 
+    Also, save the image with the identified people highlighted.
+    
+
+    Args:
+        im (path): path to the image
+    
+    """
     img = plt.imread(im)
-    # img = plt.imread('media/goal.jpg')
-    classes = None
+    classes = None 
+    
+    # read coco class names
     with open('coco.names', 'r') as f:
         classes = [line.strip() for line in f.readlines()]
 
-
+    # size of image
     Width = img.shape[1]
     Height = img.shape[0]
 
@@ -62,7 +72,7 @@ def get_field_positions(im):
                 boxes.append([x, y, w, h])
                 
     indices = cv2.dnn.NMSBoxes(boxes, confidences, 0.1, 0.1)
-    # print("==>> indices.shape: ", indices.shape)
+    
     #check if is people detection
     player_number=0
     u_im=[] # player postion
@@ -78,6 +88,8 @@ def get_field_positions(im):
             cv2.putText(img, label, (round(box[0])-10,round(box[1])-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
             bottom_right_corner=(round(box[0]+box[2]),round(box[1]+box[3]))
             u_im.append(bottom_right_corner)
+            
+    # save image with identified people highlighted
     fig = plt.figure(figsize=(20,10))
     ax1 = fig.add_subplot(1,1,1)
     # remove axis
@@ -85,9 +97,9 @@ def get_field_positions(im):
     ax1.imshow(img)
     plt.savefig('flask_app/static/images/user_image_detected.jpg', bbox_inches='tight')
     plt.title("detection")
+    
     # save coordinte of players
     with open('GFG.csv', 'w',newline='') as outfile:
         writer = csv.writer(outfile)
-        #writer.writerow(["",""])
         writer.writerows(u_im)
-get_field_positions(image_path)
+# get_field_positions(image_path)

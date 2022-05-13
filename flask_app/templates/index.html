@@ -17,7 +17,7 @@
           
             <section class="page">
                 <div class="container">
-                    <h1 id="title">Offside detection</h1>
+                    <h1 id="title"><a href="{{ url_for('index')}}">Offside detection</a></h1>
                     
                         <ul id="tilesWrap">
                             <li>
@@ -29,9 +29,9 @@
                             </li>
                             <li>
                                 <h2>02</h2>
-                                <a href="auto.html"><h3>Automatic</h3></a>
+                                <a href="{{url_for('auto')}}"><h3>Automatic</h3></a>
                                 <p>
-                                    Automatically calibrate the image
+                                    Automatically calibrate the image (not yet implemented)
                                 </p>
                             </li>
                         </ul>

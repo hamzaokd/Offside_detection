@@ -1,10 +1,14 @@
+"""
+flask app
+author:Hamza Oukaddi
+"""
+
 from re import U
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_from_directory
 import os ,sys
 import time
 import numpy as np
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from offside_detection import *
 from identification import get_field_positions
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
@@ -13,7 +17,7 @@ import offs
 
 
 UPLOAD_FOLDER = 'flask_app/static/user_input'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app=Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -25,21 +29,23 @@ def index():
 @app.route('/about')
 def about():
     
-    return '''<html>
-    <body>
-    offside detection
-    </body
-    </html
-    '''
+    return render_template('about.html')
 
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@app.route('/auto')
+def auto():
+    return """
+    Still not implemented, please use the interactive method <a href="interact.html">here</a> or go to the <a href="index.html">home page</a>
+    """
+
 @app.route('/interact.html', methods=['GET','POST'])
 def upload_file():
     if request.method == 'POST':
+        file1 = request.files['file1']
         if 'file1' not in request.files:
             return 'there is no file in form!'
         file1 = request.files['file1']
@@ -66,7 +72,7 @@ def upload_file():
             return redirect('calibration.html')
         return '''
         file not allowed
-        <a href="/interact">go back</a>
+        <a href="interact.html">go back</a>
         '''
     return render_template('interact.html')
 

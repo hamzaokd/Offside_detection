@@ -5,27 +5,33 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
         <link rel="stylesheet" href="static/css/style.css?v=1.0.0">
     </head>
-    <main class="main">
-        <aside class="sidebar">
+    <body>
+    <!-- <main class="main"> -->
+        <!-- <aside class="sidebar"> -->
         
-            <nav class="nav">
+            <!-- <nav class="nav"> -->
                 <ul class="active">
                     <li><a href="{{ url_for('index')}}">New detection</a></li>
                     <li><a href="{{url_for('about')}}">About</a></li>
                 </ul>
-            </nav>
-        </aside>
+            <!-- </nav> -->
+        <!-- </aside> -->
       
-        <section class="page">
+        <!-- <section class="page"> -->
             <div class="container">
-                <h1 id="title">Offside detection</h1>
+                <h1 id="title"><a href="{{ url_for('index')}}">Offside detection</a></h1>
                 
 
     
             <div>
                 <h2>How to calibrate the image</h2>
+                
+                    Click on 4 points on both images for the calibration. The points should be corresponding and in the same order. <br>
+
+                    After the fouth point is clicked, click again for the fifth time to confirm, you will then get coordinates which you'll need to put in the text fields below.
+                
                 {% if feedback %}
-                <p class="text-danger float-right">{{ feedback }}</p>
+                <p class="text-danger">{{ feedback }}</p>
                 {% endif %}
                 <div class='parent'>
                     <div class='child'>
@@ -49,7 +55,7 @@
                     </div>
 
                 </div>
-                <input type="submit" value="upload">
+                <input type="submit" value="calibrate">
             </form>
             </div>
                 <div id="coor1"></div>
@@ -118,7 +124,7 @@
 
                 </script>
             </div>
-            </section>
-        </main>  
+            <!-- </section> -->
+        <!-- </main>   -->
         </body>
 </html>

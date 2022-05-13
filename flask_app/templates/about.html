@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Offside detection</title>
+        <link rel="stylesheet" href="static/css/style.css?v=1.0.0">
+
+    </head>
+    <body>
+
+
+        <h1 id="detection-of-offsides-in-football"><a href="{{url_for('index')}}">Detection of offsides in football</a></h1>
+
+        <h2 id="goal">Goal</h2>
+        <p>
+            My idea is to work on a still image of a TV broadcast of a football match following these steps: 
+        </p>
+        <ul>
+            <li>calibrate the camera to the field to get 3d world coordinate</li>
+            <li>get position of the players</li>
+            <li>identify the players of different teams </li>
+            <li>check if a player is on an offside position</li>
+        </ul>
+        <p>I will discuss each step separately</p>
+        <h2 id="type-of-photos-i-will-be-working-on">Type of photos i will be working on</h2>
+        <p>
+            <SPAN STYLE="text-decoration:line-through">For now, I will be working on a single frame, possibly <a href="https://github.com/hamzaokd/Offside_detection/blob/main/media/goal.jpg">this</a>.
+        I choose this picture because i already know the dimensions of the field, so the work will be easier.</SPAN> <br>
+    </p>
+    <p>
+        <SPAN STYLE="text-decoration:line-through">I'm planing to make my program work on pictures but the problem is i will have to calibrate the camera each time, given that i know the field dimensions.</SPAN>
+    </p>
+    The user can now input any picture he wants.
+        <h2 id="calibration-of-the-camera">Calibration of the camera</h2>
+        <p>On a single frame, this step is quite easy, I'll be using some OpenCV functions to detect the corners and goal, to get the intrinsic coordinates of the camera. This will allow me to get the positions of a player in the real world from the position of it's corresponding pixel. </p>
+        <h2 id="get-position-of-the-player">Get position of the player</h2>
+        <p>Usually, players have at least one foot on the ground, So, their positions on the field is the postion of the feet .
+        There are 2 ways to get the position of a player:</p>
+        <ol>
+            <li>Manually click the feets of all the players (manual, not intersting)</li>
+            <li>Automatically getting the feet positions( what i wanted to achieve but a bit tricky)
+        </ol>
+        <h2 id="identification-of-the-players-teams">Identification of the players teams</h2>
+            This is the hardest step. I was thinking about some sort of clustering, then classification. But What if the user had the possibility to pick the color of each team jersey and we then get some algorithm to get the players. 
+            Or maybe just enter it manually. I'm not sure about the latter one.
+            I can also look for some sort of deep learning model to get this step right.but its gonna be the hardest way. </li>
+        <h2 id="ball-position">Ball position</h2>
+        <p>
+            The position of the ball is very important, because offside rules depends a lot on it (if it was the last after every attacker)
+        </p>
+        <h2 id="check-for-offside">Check for offside</h2>
+        <p>
+            After all these steps, this gonna be the easiest one, we will just compare the "minimum"; x coordinate of each team. 
+        For now,I will not study the edges cases, like goalkeeper before last defender, or ball in other center of half of the field. 
+    </p>
+    To learn more about the offside rules, you can check <a href="https://en.wikipedia.org/wiki/Offside_(association_football)" target="_blank" style="background-color:white;">this</a>.
+    </body>
+</html>

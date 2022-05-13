@@ -1,16 +1,33 @@
-from matplotlib import docstring
-from matplotlib.image import imsave
+"""
+author:Hamza Oukaddi
+
+"""
 import numpy as np
 import cv2
-from PIL import Image
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
 import csv
+import matplotlib.pyplot as plt
+from PIL import Image
+
 
 
 # coord=np.array([[200,110],[200,210],[300,210],[300,110]],[[81,100],[459,80],[450,361],[24,341]],dtype=np.int32)
 def get_offsides(coord):
+    """read the input coordinates, tranform them and return the positions of the players in a map field.
+    keep only players and draw offside lines on both sides
+
+    Args:
+        coord (2d array): inout coordinates
+    """
     def coordinate_ajust(coord):
+        """transform the coordinates to the right format
+        when the user enters the coordinates, they will need to be normalised
+
+        Args:
+            coord (2d array): inpout coordinates
+
+        Returns:
+            2d array: normalised coordinates
+        """
         field,user=coord
         # field 
         img_field=Image.open("flask_app/static/images/field.jpg")
@@ -36,6 +53,14 @@ def get_offsides(coord):
 
 
     def quad_coordinate(coord):
+        """returns dictionary of coordinates for the field and map
+
+        Args:
+            coord (2d array): input coordinates
+
+        Returns:
+            dict: map and field coordinates
+        """
         c=coordinate_ajust(coord)
         quad_coords ={
             "lonlat":np.array(c[0],dtype=np.float32),
@@ -104,6 +129,14 @@ def get_offsides(coord):
 
 
     def quad_mapper(coord):
+        """Transforms the coordinates to the right format and returns the mapper object
+
+        Args:
+            coord (2d array): input coordinates
+
+        Returns:
+            PixelMapper: pixelMapper object which transform cooridinates
+        """
         quad_coords=quad_coordinate(coord)
         pm = PixelMapper(quad_coords["pixel"], quad_coords["lonlat"])
         return pm
@@ -141,13 +174,33 @@ def get_offsides(coord):
             data.append([x,y])
     u_imm=np.array(data)
     u_im=get_player_position(u_imm,coord)
+    
 
     def get_last_player(u_im):
+        """return the last player position
+
+        Args:
+            u_im (array): list of players
+
+        Returns:
+            array: cooridnates of the last player
+        """
         m=np.min(u_im[:,0])
         M=np.max(u_im[:,0])
         return m,M
     boundary=[[70,70],[1550,70],[1550,908],[70,908]]
+    
+    
     def delete_non_players(u,boundary):
+        """delete people not players, who generally are standing next to field(sideline refs,ball kids ..)
+
+        Args:
+            u (2d array): list of people detected
+            boundary (2d array): coordinates of corners of the field
+
+        Returns:
+            2d array: array of only players
+        """
         index=[]
         for i in range(len(u)):
             if (u[i][0]<boundary[0][0] or u[i][0]>boundary[2][0]) :
@@ -159,7 +212,7 @@ def get_offsides(coord):
 
     u_im=delete_non_players(u_im,boundary)
        
-    
+    # Save figure of players position in a map
     fig = plt.figure()
     im=plt.imread("flask_app/static/images/field.jpg")
     plt.imshow(im)
