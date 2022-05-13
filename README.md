@@ -6,13 +6,15 @@
 
 Here is an example of an input image:
 
-![football match](https://github.com/hamzaokd/Offside_detection/blob/main/rep/football.jpg)
+
+<img src="https://github.com/hamzaokd/Offside_detection/blob/main/media/rep/football.jpg" alt="football match" height="300px"/> 
+
 
 For the moment, after the detection we get this:
 
 Detected players             |  Positions on the field
 :-------------------------:|:-------------------------:
-![detected players](https://github.com/hamzaokd/Offside_detection/blob/main/media/rep/user_image_detected.jpg)  |  ![positions on the field](https://github.com/hamzaokd/Offside_detection/blob/main/rep/field_with_players.jpg)
+<img src="https://github.com/hamzaokd/Offside_detection/blob/main/media/rep/user_image_detected.jpg" alt="Detected players" height="300px"/> | <img src="https://github.com/hamzaokd/Offside_detection/blob/main/media/rep/field_with_players.jpg" alt="Detected players" height="300px"/> 
 
 How to use
 ----------
