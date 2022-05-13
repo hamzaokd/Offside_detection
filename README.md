@@ -4,14 +4,23 @@
 
 *Personal project still in developemnt, still working on pages layout and functionalities.*
 
+Here is an example of an input image:
+
+![football match](https://github.com/hamzaokd/Offside_detection/blob/main/rep/football.jpg)
+
+For the moment, after the detection we get this:
+
+Detected players             |  Positions on the field
+:-------------------------:|:-------------------------:
+![detected players](https://github.com/hamzaokd/Offside_detection/blob/main/media/rep/user_image_detected.jpg)  |  ![positions on the field](https://github.com/hamzaokd/Offside_detection/blob/main/rep/field_with_players.jpg)
 
 How to use
 ----------
 
 1. Download the repository
 2. Download the weight file, this is essential for the program to work [link here](https://pjreddie.com/media/files/yolov3.weights). It's from the famous [YOLO project](https://pjreddie.com/darknet/yolo/).
-3. Run the command file `run.cmd`
-4. Further instructions when launching the program
+3. Run the command file `run.cmd` and open the browser.
+4. Further instructions on the web page when launching the program
 
 Goal
 ----
