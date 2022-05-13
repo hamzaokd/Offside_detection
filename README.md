@@ -4,6 +4,17 @@
 
 *Personal project still in developemnt, still working on pages layout and functionalities.*
 
+*Languages and libraries used:*
+*-Python
+-Flask
+-OpenCV
+-Eventually some scikit-learn
+-HTML,CSS and some JavaScript*
+
+-----------------------------
+
+**This little project will detect offsides in an image input by the user**
+
 Here is an example of an input image:
 
 
