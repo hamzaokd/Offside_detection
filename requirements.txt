@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Flask_Compress==1.4.0
 Flask==1.1.0
 Flask_SSLify==0.1.5
@@ -5,3 +6,6 @@ requests==2.20.1
 gunicorn
 Jinja2
 gevent
+=======
+
+>>>>>>> 6b63bb1fa0d0d1c72c1f850ef8a8ab2913905c45
