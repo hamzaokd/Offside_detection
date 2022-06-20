@@ -1,0 +1,130 @@
+<html>
+    <head>
+        <title>Offside detection</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+        <link rel="stylesheet" href="static/css/style.css?v=1.0.0">
+    </head>
+    <body>
+    <!-- <main class="main"> -->
+        <!-- <aside class="sidebar"> -->
+        
+            <!-- <nav class="nav"> -->
+                <ul class="active">
+                    <li><a href="{{ url_for('index')}}">New detection</a></li>
+                    <li><a href="{{url_for('about')}}">About</a></li>
+                </ul>
+            <!-- </nav> -->
+        <!-- </aside> -->
+      
+        <!-- <section class="page"> -->
+            <div class="container">
+                <h1 id="title"><a href="{{ url_for('index')}}">Offside detection</a></h1>
+                
+
+    
+            <div>
+                <h2>How to calibrate the image</h2>
+                
+                    Click on 4 points on both images for the calibration. The points should be corresponding and in the same order. <br>
+
+                    After the fouth point is clicked, click again for the fifth time to confirm, you will then get coordinates which you'll need to put in the text fields below.
+                
+                {% if feedback %}
+                <p class="text-danger">{{ feedback }}</p>
+                {% endif %}
+                <div class='parent'>
+                    <div class='child'>
+                        <img src="{{'static/images/field.jpg'}}" id="field" height="400px" width=auto />
+                        <h4>Field coordinates</h4>
+                        <p id="field_coor"></p>
+            <form method="post" enctype="multipart/form-data">
+                            <label>The field points coordinates</label>
+                            <input type="text"  id="field_coord" name="field_coord" />
+                            
+                        
+                    </div>
+                    <div class='child'>
+                        <!-- <img src="{{'static/user_input/'}}{{file1}}" id="user_input" width="400px" height=auto /> -->
+                        <img src="static/user_input/user_image.jpg" id="user_input" height="400px" width=auto />
+                        <h4>User coordinates</h4>
+                        <p id="user_img_coor"></p>
+                            <label>The user points coordinates</label>
+                            <input type="text"  id="user_coord" name="user_coord" />
+  
+                    </div>
+
+                </div>
+                <input type="submit" value="calibrate">
+            </form>
+            </div>
+                <div id="coor1"></div>
+
+
+
+              
+                <script type="text/javascript">
+                    var field_pts =0;                    
+                    var field_coor= [];             
+                                       
+                    $('#field').click(function(e)
+                    {   
+                        var offset_t = $(this).offset().top - $(window).scrollTop();
+                        var offset_l = $(this).offset().left - $(window).scrollLeft();
+
+                        var left = Math.round( (e.clientX - offset_l) );
+                        var top = Math.round( (e.clientY - offset_t) );
+                        if (field_pts<4){
+                        field_coor.push([left,top]);
+                        // alert("Left: "+field_coor);
+                        field_pts++;
+                        }
+                        else{
+                            alert("You have already clicked 4 points");
+                            document.getElementById("field_coor").innerHTML=field_coor;
+                        }
+                    });
+
+                 
+
+
+                    var user_coor= [];   
+                    var user_pts=0;          
+                                       
+                    $('#user_input').click(function(e)
+                    {   
+                        var offset_t = $(this).offset().top - $(window).scrollTop();
+                        var offset_l = $(this).offset().left - $(window).scrollLeft();
+
+                        var left = Math.round( (e.clientX - offset_l) );
+                        var top = Math.round( (e.clientY - offset_t) );
+                        if (user_pts<4){
+                        user_coor.push([left,top]);
+                        // alert("Left: "+user_coor);
+                        user_pts++;
+                        }
+                        else{
+                            alert("You have already clicked 4 points");
+                            document.getElementById("user_img_coor").innerHTML=user_coor;
+                        }
+                       
+                    });
+                
+                </script>
+                                      
+                        <script type="text/javascript">
+                            var dd=pts;
+                        document.getElementById("t").innerHTML=dd;
+                        
+                   
+                        if (pts == 3){
+                            alert("done"+ pts);
+                            document.getElementById("n").innerHTML=coor;
+                        }
+
+                </script>
+            </div>
+            <!-- </section> -->
+        <!-- </main>   -->
+        </body>
+</html>

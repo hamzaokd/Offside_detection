@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Offside detection</title>
+        <link rel="stylesheet" href="static/css/style.css?v=1.0.0">
+    </head>
+    <body>
+        <main class="main">
+            <aside class="sidebar">
+            
+                <nav class="nav">
+                    <ul class="active">
+                        <li><a href="{{ url_for('index')}}">New detection</a></li>
+                        <li><a href="{{url_for('about')}}">About</a></li>
+                    </ul>
+                </nav>
+            </aside>
+          
+            <section class="page">
+                <div class="container">
+                    <h1 id="title"><a href="{{ url_for('index')}}">Offside detection</a></h1>
+                    
+
+            <form method="post" enctype="multipart/form-data">
+                <label for="file">Select file to upload:</label>
+                <input type="file" id="image" name="file1"> <br>
+                <input type="submit" value="upload" name="submit">
+                
+                </form>
+     
+        
+                </div>
+            </section>
+
+            </main>
+    </body>
+</html>
