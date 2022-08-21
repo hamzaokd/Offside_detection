@@ -16,7 +16,7 @@ from PIL import Image
 import offs
 
 
-UPLOAD_FOLDER = '/static/user_input'
+UPLOAD_FOLDER = './static/user_input'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app=Flask(__name__)
