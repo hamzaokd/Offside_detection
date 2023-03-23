@@ -1,15 +1,10 @@
-[Detection of offsides in football]({{url_for('index')}})
+Detection of offsides in football
 =========================================================
 
 
 *Personal project still in developemnt, still working on pages layout and functionalities.*
 
-*Languages and libraries used:*
-*-Python
--Flask
--OpenCV
--Eventually some scikit-learn
--HTML,CSS and some JavaScript*
+*Languages and libraries used: -Python -OpenCV -scikit-learn -Flask -HTML,CSS and JavaScript.*
 
 -----------------------------
 
@@ -21,18 +16,21 @@ Here is an example of an input image:
 <img src="https://github.com/hamzaokd/Offside_detection/blob/main/media/rep/football.jpg" alt="football match" height="300px"/> 
 
 
-For the moment, after the detection we get this:
+For the moment, after the detection we get the detected players on the image:
 
 Detected players             |  Positions on the field
 :-------------------------:|:-------------------------:
 <img src="https://github.com/hamzaokd/Offside_detection/blob/main/media/rep/user_image_detected.jpg" alt="Detected players" height="300px"/> | <img src="https://github.com/hamzaokd/Offside_detection/blob/main/media/rep/field_with_players.jpg" alt="Detected players" height="300px"/> 
+
+
+After removing players that are not on the field (managers, referees, etc...), we get this bird eye view of the field with the players positions, and the lines that represent the offside lines in both sides
 
 How to use
 ----------
 
 1. Download the repository
 2. Download the weight file, this is essential for the program to work [link here](https://pjreddie.com/media/files/yolov3.weights). It's from the famous [YOLO project](https://pjreddie.com/darknet/yolo/).
-3. Run the command file `run.cmd` and open the browser.
+3. Run the Flask app server
 4. Further instructions on the web page when launching the program
 
 Goal
@@ -50,16 +48,14 @@ I will discuss each step separately
 Type of photos I will be working on
 -----------------------------------
 
-~~For now, I will be working on a single frame, possibly [this](https://github.com/hamzaokd/Offside_detection/blob/main/media/goal.jpg). I choose this picture because i already know the dimensions of the field, so the work will be easier~~
+The input images should be a single frame from a footbal game broadcast (Like this). The bigger the field of view the more accurate the detection will be.
 
-~~I'm planing to make my program work on pictures but the problem is I will have to calibrate the camera each time, given that I know the field dimensions.~~
-
-The user can now input any picture he wants.
+One of the features that can be added is possibility of using a video, as such that the offside lines will be drawn in real time
 
 Calibration of the camera
 -------------------------
 
-On a single frame, this step is quite easy, I'll be using some OpenCV functions to detect the corners and goal, to get the intrinsic coordinates of the camera. This will allow me to get the positions of a player in the real world from the position of it's corresponding pixel.
+On a single frame, this step is quite easy, the user will need to click on 4 points on the field in the input image, and then click on the corresponding points in a field map. The program will then calculate the homography matrix, which will be used to get the 3d world coordinates of the players.
 
 Get position of the player
 --------------------------
@@ -68,6 +64,8 @@ Usually, players have at least one foot on the ground, So, their positions on th
 
 1. Manually click the feets of all the players (manual, not intersting)
 2. Automatically getting the feet positions(what I wanted to achieve but a bit tricky)
+
+After using OpenCV functions, and a trained machine learning model, I've got the positions of the players.
 
 Identification of the players teams
 -----------------------------------
