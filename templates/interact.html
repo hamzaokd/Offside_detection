@@ -22,11 +22,18 @@
                     <h1 id="title"><a href="{{ url_for('index')}}">Offside detection</a></h1>
                     
 
-            <form method="post" enctype="multipart/form-data">
+            {#<form method="post" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+            
                 <label for="file">Select file to upload:</label>
-                <input type="file" id="image" name="file1"> <br>
-                <input type="submit" value="upload" name="submit">
+                {{form.image()}}<br>
+                {{form.submit()}}
                 
+                </form>
+                #}
+                <form method="POST" enctype="multipart/form-data" action="/interact.html">
+                    <input type="file" id="myFile" name="uploaded-file" accept=".jpg">
+                    <input type="submit" value="Submit">
                 </form>
      
         

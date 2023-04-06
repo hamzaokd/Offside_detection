@@ -1,25 +1,29 @@
 <html>
-    <head>
         <title>Offside detection</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">   
         <link rel="stylesheet" href="static/css/style.css?v=1.0.0">
     </head>
     <body>
-        <body>
-            <h1 id="title"><a href="{{ url_for('index')}}">Offside detection</a></h1>
-            <nav>
-                <ul>
-                    <li><a href="{{ url_for('index')}}">New detection</a></li>
-                    <li><a href="about.html">About</a></li>
-                </ul>
-            </nav>
-            <div>
-                <ul>
-            <li>detected players </li>
-            <img src="static/images/user_image_detected.jpg" alt="players" width="auto" height="500">
-            <li>map of players</li>
-            <img src="static/images/field_with_players.jpg" alt="players" width="auto" height="500">
-                    </ul>
+        <div class="bg-light bg-gradient">
+            <h1 id="title"><a href="{{ url_for('index')}}" style="all:unset;cursor:pointer">Offside detection</a></h1>
+<br/>
+            <div class='parent'>
+                <div class='child'>
+                        <h2>Offside lines</h2> Only showing last players on both teams for the moment
+
+                        <img src="{{offside_lines}}"  width="600px" height=auto alt="offside lines" />
+                    
+                </div>
+                <div class='child'>
+                    <h2>Players positions on map of the field</h2>
+                        <img src="{{players_positions}}"  width="600px" height=auto alt="map of players positions" />
+
+                </div>
+
             </div>
+
+ 
+        </div>
             
     </body>
 </html>

@@ -8,14 +8,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import csv
 from PIL import Image
+import matplotlib
+matplotlib.use('agg')
 
 
 
-# Open image
-image_path="flask_app/static/user_input/user_image.jpg"
-img = plt.imread(image_path)
 
-def get_field_positions(im):
+def get_field_positions(im,input):
+    # Open image
+    image_path=input
+    img = plt.imread(image_path)
     """Identify peoples (players and people standing by) in the image
     and write their positions to a csv file. 
     Also, save the image with the identified people highlighted.
@@ -77,6 +79,8 @@ def get_field_positions(im):
     player_number=0
     u_im=[] # player postion
     boxes_player=[]
+    if indices == []:
+        return None
     for i in indices:
         box = boxes[i]
         if class_ids[i]==0:
@@ -86,7 +90,7 @@ def get_field_positions(im):
             player_number +=1
             cv2.rectangle(img, (round(box[0]),round(box[1])), (round(box[0]+box[2]),round(box[1]+box[3])), (0, 0, 0), 2)
             cv2.putText(img, label, (round(box[0])-10,round(box[1])-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
-            bottom_right_corner=(round(box[0]+box[2]),round(box[1]+box[3]))
+            bottom_right_corner=[round(box[0]+box[2]),round(box[1]+box[3])]
             u_im.append(bottom_right_corner)
             
     # save image with identified people highlighted
@@ -95,11 +99,14 @@ def get_field_positions(im):
     # remove axis
     ax1.axis('off')
     ax1.imshow(img)
-    plt.savefig('flask_app/static/images/user_image_detected.jpg', bbox_inches='tight')
-    plt.title("detection")
+    output = input.replace('.', '_detected.')
+    plt.savefig(output, bbox_inches='tight', pad_inches=0,transparent=True)
+
+    # plt.title("detection")
     
     # save coordinte of players
-    with open('GFG.csv', 'w',newline='') as outfile:
+    return u_im
+    with open(input+'.csv', 'w',newline='') as outfile:
         writer = csv.writer(outfile)
         writer.writerows(u_im)
 # get_field_positions(image_path)

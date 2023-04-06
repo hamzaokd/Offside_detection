@@ -7,39 +7,46 @@ import cv2
 import csv
 import matplotlib.pyplot as plt
 from PIL import Image
+from copy import deepcopy 
+import matplotlib
+matplotlib.use('agg')
 
 
 
 # coord=np.array([[200,110],[200,210],[300,210],[300,110]],[[81,100],[459,80],[450,361],[24,341]],dtype=np.int32)
-def get_offsides(coord):
+def get_offsides(coord,coord_data,input):
     """read the input coordinates, tranform them and return the positions of the players in a map field.
     keep only players and draw offside lines on both sides
 
     Args:
         coord (2d array): inout coordinates
     """
-    def coordinate_ajust(coord):
+    print("coord1",coord)
+    def coordinate_ajust(cc):
         """transform the coordinates to the right format
         when the user enters the coordinates, they will need to be normalised
 
         Args:
-            coord (2d array): inpout coordinates
+            c (2d array): inpout coordinates
 
         Returns:
             2d array: normalised coordinates
         """
-        field,user=coord
+        print("coord2",coord)
+        c = deepcopy(cc)
+        field,user=c
         # field 
-        img_field=Image.open("flask_app/static/images/field.jpg")
+        img_field=Image.open("static/images/field.jpg")
         width_field,height_field=img_field.size
         height_field_html=400
         width_field_html=400*width_field/height_field
+        print("coord3",coord)
         for i in range(4):
             field[i,1]=field[i,1]*height_field/height_field_html
             field[i,0]=field[i,0]*width_field/width_field_html
 
         # user input
-        img_user=Image.open("flask_app/static/user_input/user_image.jpg")
+        img_user=Image.open(input)
         width_user,height_user=img_user.size
         height_user_html=400
         width_user_html=400*width_user/height_user
@@ -52,20 +59,21 @@ def get_offsides(coord):
 
 
 
-    def quad_coordinate(coord):
+    def quad_coordinate(co):
         """returns dictionary of coordinates for the field and map
 
         Args:
-            coord (2d array): input coordinates
+            c (2d array): input coordinates
 
         Returns:
             dict: map and field coordinates
         """
-        c=coordinate_ajust(coord)
+        c=coordinate_ajust(co)
         quad_coords ={
             "lonlat":np.array(c[0],dtype=np.float32),
             "pixel": np.array(c[1],dtype=np.float32)
         }
+        
         return quad_coords
 
     class PixelMapper(object):
@@ -127,34 +135,47 @@ def get_offsides(coord):
             
             return (pixel[:2,:]/pixel[2,:]).T
 
+        def warpImage(self, image):
+            """
+            Warp an image using the pixel to lon-lat mapping
+            Parameters
+            ----------
+            image : numpy array
+                The image to be warped
+            Returns
+            -------
+            numpy array
+                The warped image
+            """
+            return cv2.warpPerspective(image, self.M, (image.shape[1],image.shape[0]))
 
-    def quad_mapper(coord):
+    def quad_mapper(c):
         """Transforms the coordinates to the right format and returns the mapper object
 
         Args:
-            coord (2d array): input coordinates
+            c (2d array): input coordinates
 
         Returns:
             PixelMapper: pixelMapper object which transform cooridinates
         """
-        quad_coords=quad_coordinate(coord)
+        quad_coords=quad_coordinate(c)
         pm = PixelMapper(quad_coords["pixel"], quad_coords["lonlat"])
         return pm
 
 
 
-    def get_player_position(pos,coord):
+    def get_player_position(pos,c):
         """return the lonlat of the player position
 
         Args:
             pos (list): list of pixel cooridnates of the players
-            coord (list): list of selected 4 coordinates to map the field
+            c (list): list of selected 4 coordinates to map the field
 
         Returns:
             _type_: list of lonlat coordinates
         """
         u_im=[]
-        pm=quad_mapper(coord)
+        pm=quad_mapper(c)
         for i in range(len(pos)):
             res=pm.pixel_to_lonlat([pos[i]])
             u=res[0]
@@ -165,16 +186,18 @@ def get_offsides(coord):
 
 
     data=[]
-    with open("GFG.csv") as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
+    # with open("GFG.csv") as csvfile:
+    #     reader = csv.reader(csvfile)
+    #     for row in reader:
             
-            x = int(row[0])
-            y = int(row[1])
-            data.append([x,y])
+    #         x = int(row[0])
+    #         y = int(row[1])
+    #         data.append([x,y])
     u_imm=np.array(data)
-    u_im=get_player_position(u_imm,coord)
     
+    
+    u_imm = np.array(coord_data)
+    u_im=get_player_position(u_imm,coord)
 
     def get_last_player(u_im):
         """return the last player position
@@ -211,14 +234,65 @@ def get_offsides(coord):
         return u
 
     u_im=delete_non_players(u_im,boundary)
+    
+    def get_offside_line_irl(m,M):
+        """return the offside line irl
+
+        Args:
+            m (float): min x coordinate of the last player
+            M (float): max x coordinate of the last player
+
+        Returns:
+            float: offside line
+        """
+        pm=quad_mapper(coord)
+        lower_left = pm.lonlat_to_pixel((m,908))
+        upper_left = pm.lonlat_to_pixel((m,70))
+        lower_right = pm.lonlat_to_pixel((M,908))
+        upper_right = pm.lonlat_to_pixel((M,70))
+        
+        return lower_left,upper_left,lower_right,upper_right
        
+       
+    minPlayer,maxPlayer=get_last_player(u_im)
     # Save figure of players position in a map
     fig = plt.figure()
-    im=plt.imread("flask_app/static/images/field.jpg")
+    im=plt.imread("static/images/field.jpg")
     plt.imshow(im)
     plt.scatter(u_im[:,0],u_im[:,1])
     plt.axis('off')
-    plt.vlines(get_last_player(u_im)[0],ymin=0,ymax=980,color='red',linewidth=3)
-    plt.vlines(get_last_player(u_im)[1],ymin=0,ymax=980,color='red',linewidth=3)
-    plt.savefig("flask_app/static/images/field_with_players.jpg",bbox_inches='tight')
+    plt.vlines(minPlayer,ymin=0,ymax=980,color='red',linewidth=3)
+    plt.vlines(maxPlayer,ymin=0,ymax=980,color='red',linewidth=3)
+    output = input.replace('.', '_top_map.')
+    plt.savefig(output,bbox_inches='tight',pad_inches=0,transparent=True)
 
+    # draw in user image
+    inputCV2 = cv2.imread(input)
+    offside_lines = get_offside_line_irl(minPlayer,maxPlayer)
+    print(offside_lines)
+    cv2.line(inputCV2,(int(offside_lines[0][0][0]),int(offside_lines[0][0][1])),(int(offside_lines[1][0][0]),int(offside_lines[1][0][1])),(0,0,255),3)
+    cv2.line(inputCV2,(int(offside_lines[2][0][0]),int(offside_lines[2][0][1])),(int(offside_lines[3][0][0]),int(offside_lines[3][0][1])),(0,0,255),3)
+    
+    pm = quad_mapper(coord)
+    distortion = pm.warpImage(inputCV2)
+    # draw hough lines
+    # distortion = inputCV2
+    # gray = cv2.cvtColor(distortion, cv2.COLOR_BGR2GRAY)
+    # edges = cv2.Canny(gray, 50, 150, apertureSize=3)
+    # lines = cv2.HoughLines(edges, 1, np.pi / 180, 200)
+    # for line in lines:
+    #     rho, theta = line[0]
+    #     a = np.cos(theta)
+    #     b = np.sin(theta)
+    #     x0 = a * rho
+    #     y0 = b * rho
+    #     x1 = int(x0 + 1000 * (-b))
+    #     y1 = int(y0 + 1000 * (a))
+    #     x2 = int(x0 - 1000 * (-b))
+    #     y2 = int(y0 - 1000 * (a))
+    #     cv2.line(distortion, (x1, y1), (x2, y2), (0, 0, 255), 2)
+    
+    cv2.imwrite("static/images/distortion.jpg",distortion)
+    outputCV2 = input.replace('.', '_lines.')
+    cv2.imwrite(outputCV2, inputCV2)
+    

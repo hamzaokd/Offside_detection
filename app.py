@@ -4,7 +4,8 @@ author:Hamza Oukaddi
 """
 
 from re import U
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_from_directory, session
+from werkzeug.utils import secure_filename
 import os ,sys
 import time
 import numpy as np
@@ -12,15 +13,28 @@ import numpy as np
 from identification import get_field_positions
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, FileField
+from wtforms.validators import DataRequired
 from PIL import Image
 import offs
+import base64
 
 
-UPLOAD_FOLDER = './static/user_input'
+UPLOAD_FOLDER = 'static\\user_input'
+
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app=Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#csrf key
+app.config['SECRET_KEY'] = 'secret'
+
+
+# wtf form for the user to input the image
+class Image_upload(FlaskForm):
+    image = FileField('image', validators=[DataRequired()])
+    submit = SubmitField('Upload')
 
 @app.route('/')
 def index():
@@ -45,38 +59,33 @@ def auto():
 @app.route('/interact.html', methods=['GET','POST'])
 def upload_file():
     if request.method == 'POST':
-        file1 = request.files['file1']
-        if 'file1' not in request.files:
-            return 'there is no file in form!'
-        file1 = request.files['file1']
-        if file1.filename == '':
-            flash('No selected file')
-            print("no")
-            return "No selected file"
-        if file1 and allowed_file(file1.filename):
-            path = os.path.join(app.config['UPLOAD_FOLDER'], file1.filename)
-            # filename, file_extension = os.path.splitext(path)
-            # name="user_image"+file_extension
+    # if form.validate_on_submit():
+        uploaded_image = request.files['uploaded-file']
 
-            # npath=os.path.join(app.config['UPLOAD_FOLDER'], name)
-            file1.save(path)
-            file_name = file1.filename
-            #convert to jpg
-            im = Image.open(path)
-            rgb_im = im.convert("RGB")
-            npath=os.path.join(app.config['UPLOAD_FOLDER'], "user_image.jpg")
-            rgb_im.save(npath)
-            print(npath)
+        # if uploaded_image.filename == '':
+        #     flash('No selected file')
+        #     print("no")
+        #     return "No selected file"
+        # if uploaded_image and allowed_file(uploaded_image.filename):
+        img_filename = secure_filename(uploaded_image.filename)
+        uploaded_image.save(os.path.join(app.config['UPLOAD_FOLDER'], img_filename))
+        session['uploaded_img_file_path'] = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
+        img_file_path = session.get('uploaded_img_file_path', None)
+        return redirect(url_for('cali'))
+        return render_template('calibration.html', image_b64=img_file_path)
             
-            
-            return redirect('calibration.html')
-        return '''
-        file not allowed
-        <a href="interact.html">go back</a>
-        '''
+    
     return render_template('interact.html')
 
 
+
+@app.route('/show_image')
+def displayImage():
+    # Retrieving uploaded file path from session
+    img_file_path = session.get('uploaded_img_file_path', None)
+    # Display image in Flask application web page
+    return render_template('show_image.html', user_image = img_file_path)
+ 
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -87,6 +96,7 @@ f,u=None,None
 @app.route("/calibration.html", methods=["GET", "POST"])
 def cali():
     global coord
+    image_b64 = session.get('uploaded_img_file_path', None)
     if request.method == "POST":
         field_coord = request.form["field_coord"]
         user_coord = request.form["user_coord"]
@@ -104,7 +114,7 @@ def cali():
         
         coord=get_coord(field_coord, user_coord)
         return redirect("offside.html")
-    return render_template("calibration.html")
+    return render_template("calibration.html", image_b64=image_b64)
 
 def get_coord(f, u):
     f_coord = f.split(",")
@@ -117,9 +127,31 @@ def get_coord(f, u):
 @app.route("/offside.html", methods=["GET", "POST"])
 def offside():
     global coord
-    get_field_positions("flask_app/static/user_input/user_image.jpg") #imported from identification.py
-    offs.get_offsides(coord)
-    return render_template("offside.html",f_coord=coord)
+    image_b64 = session.get('uploaded_img_file_path', None)
+    print(image_b64, flush=True)
+    # get_field_positions("flask_app/static/user_input/user_image.jpg") #imported from identification.py
+    detected_players = get_field_positions(image_b64,image_b64) #imported from identification.py
+    if detected_players is None:
+        return render_template("no_player.html")
+    detected_players_path = image_b64.replace(".","_detected.")
+    offs.get_offsides(coord,detected_players, image_b64)
+    players_positions_path = image_b64.replace(".","_top_map.")
+    offside_lines = image_b64.replace(".","_lines.")
+    
+    return render_template("offside.html",
+                           f_coord=coord,
+                           detected_players= detected_players_path,
+                           players_positions=players_positions_path,
+                           image_b64=image_b64,
+                           offside_lines=offside_lines
+                           )
+
+
+
+
+
+
+
 
 @app.after_request
 def add_header(response):

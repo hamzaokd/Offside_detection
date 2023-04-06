@@ -1,4 +1,4 @@
-<html>
+{#<html>
     <head>
         <title>Offside detection</title>
         <link rel="stylesheet" href="static/css/style.css?v=1.0.0">
@@ -41,4 +41,37 @@
 
         </main>
     </body>
+</html>#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- link bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">    <title>Offside detection in Football</title>
+</head>
+<body>
+            <!-- i want an image, stretching from left to right, with a slightly diagonal fade into solid color in the left -->
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                </ol>
+                <div class="carousel-inner .bg-secondary .bg-darken-xl">
+                  <div class="carousel-item active .bg-secondary .bg-darken-xl">
+                    <img class="first-slide img-fluid .bg-secondary .bg-darken-xl" src="./static/images/landing.jpg" alt="image" >
+                    <div class="container">
+                      <div class="carousel-caption text-left">
+                        <h1>Offside detection in footbal</h1>
+                        <p>Upload an image of a footbal and check if a player is in an offside position</p>
+                        <form method="POST" enctype="multipart/form-data" action="/interact.html">
+                            <p><input class="btn btn-lg btn-primary" type="file" id="myFile" name="uploaded-file"></input></p>
+                            <p><button class="btn btn-lg btn-primary" type="submit">Get started</button></p>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+</body>
 </html>
