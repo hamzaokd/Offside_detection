@@ -32,6 +32,8 @@ After removing players that are not on the field (managers, referees, etc...), w
 We now can go back to the original image and draw the offside lines:
 
 <img src="https://github.com/hamzaokd/Offside_detection/blob/main/media/rep/placeholder-image_lines.jpg?raw=True" alt="Detected players" height="300px"/>
+
+
 How to use
 ----------
 
