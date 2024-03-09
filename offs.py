@@ -21,7 +21,7 @@ def get_offsides(coord,coord_data,input):
     Args:
         coord (2d array): inout coordinates
     """
-    print("coord1",coord)
+    # print("coord1",coord)
     def coordinate_ajust(cc):
         """transform the coordinates to the right format
         when the user enters the coordinates, they will need to be normalised
@@ -32,7 +32,7 @@ def get_offsides(coord,coord_data,input):
         Returns:
             2d array: normalised coordinates
         """
-        print("coord2",coord)
+        # print("coord2",coord)
         c = deepcopy(cc)
         field,user=c
         # field 
@@ -40,7 +40,7 @@ def get_offsides(coord,coord_data,input):
         width_field,height_field=img_field.size
         height_field_html=400
         width_field_html=400*width_field/height_field
-        print("coord3",coord)
+        # print("coord3",coord)
         for i in range(4):
             field[i,1]=field[i,1]*height_field/height_field_html
             field[i,0]=field[i,0]*width_field/width_field_html
@@ -269,7 +269,7 @@ def get_offsides(coord,coord_data,input):
     # draw in user image
     inputCV2 = cv2.imread(input)
     offside_lines = get_offside_line_irl(minPlayer,maxPlayer)
-    print(offside_lines)
+    # print(offside_lines)
     cv2.line(inputCV2,(int(offside_lines[0][0][0]),int(offside_lines[0][0][1])),(int(offside_lines[1][0][0]),int(offside_lines[1][0][1])),(0,0,255),3)
     cv2.line(inputCV2,(int(offside_lines[2][0][0]),int(offside_lines[2][0][1])),(int(offside_lines[3][0][0]),int(offside_lines[3][0][1])),(0,0,255),3)
     

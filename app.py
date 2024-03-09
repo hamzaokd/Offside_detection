@@ -128,11 +128,12 @@ def get_coord(f, u):
 def offside():
     global coord
     image_b64 = session.get('uploaded_img_file_path', None)
-    print(image_b64, flush=True)
+    # print(image_b64, flush=True)
     # get_field_positions("flask_app/static/user_input/user_image.jpg") #imported from identification.py
     detected_players = get_field_positions(image_b64,image_b64) #imported from identification.py
-    if detected_players is None:
-        return render_template("no_player.html")
+    if not detected_players:
+        return render_template("no_player.html",
+                               image_b64=image_b64)
     detected_players_path = image_b64.replace(".","_detected.")
     offs.get_offsides(coord,detected_players, image_b64)
     players_positions_path = image_b64.replace(".","_top_map.")

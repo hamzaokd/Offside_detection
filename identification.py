@@ -34,6 +34,12 @@ def get_field_positions(im,input):
     with open('coco.names', 'r') as f:
         classes = [line.strip() for line in f.readlines()]
 
+    # Get image shape
+    # force image to be 3D
+    if len(img.shape) == 2:
+        img = np.stack((img,)*3, axis=-1)
+    elif img.shape[2] == 4:
+        img = img[:,:,:3]
     # size of image
     Width = img.shape[1]
     Height = img.shape[0]
@@ -79,8 +85,9 @@ def get_field_positions(im,input):
     player_number=0
     u_im=[] # player postion
     boxes_player=[]
-    if indices == []:
-        return None
+    # print(indices)
+    # if indices == []:
+    #     return None
     for i in indices:
         box = boxes[i]
         if class_ids[i]==0:

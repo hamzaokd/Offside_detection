@@ -15,9 +15,9 @@
             <div>
                 <h2>How to calibrate the image</h2>
                 
-                    Click on 4 corresponding points on both images in the same ordre for the calibration. <br>
+                    Click on 4 corresponding points on both images in the same order for the calibration. <br>
 
-                    After the fouth point is clicked, click again for the fifth time to confirm, you will then get coordinates which will be put in the text boxes. <br>
+                    After the fourth point is clicked, You would get a confirmation and then just press the "calibrate" button <br>
                 
                 {% if feedback %}
                 <p class="text-danger">{{ feedback }}</p>
@@ -33,7 +33,8 @@
                         <p id="field_coor"></p>
             <form method="post" enctype="multipart/form-data">
                 <label>The field points coordinates</label>
-                <input type="text"  id="field_coord" name="field_coord" /><br/>
+                <input type="text"  id="field_coord" name="field_coord" style="display:none"/>
+                <br/>
                 <input type="submit" value="calibrate" class="btn btn-primary position-absolute start-50 translate-middle">
                             
                         
@@ -48,8 +49,7 @@
                         <h4>User coordinates</h4>
                         <p id="user_img_coor"></p>
                             <label>The user points coordinates</label>
-                            <input type="text"  id="user_coord" name="user_coord" />
-  
+                            <input type="text"  id="user_coord" name="user_coord"  style="display:none"/>
                     </div>
 
                 </div>
@@ -72,13 +72,29 @@
                         var left = Math.round( (e.clientX - offset_l) );
                         var top = Math.round( (e.clientY - offset_t) );
                         if (field_pts<4){
-                        field_coor.push([left,top]);
+                            
+                            field_coor.push([left,top]);
+                            
+                            dot_marker = document.createElement("div");
+                            dot_marker.style.position = "absolute";
+                            dot_marker.style.width = "5px";
+                            dot_marker.style.height = "5px";
+                            dot_marker.style.backgroundColor = "red";
+                            dot_marker.style.left = left+"px";
+                            dot_marker.style.top = top+"px";
+                            document.getElementById("field-container").appendChild(dot_marker);
+
                         // alert("Left: "+field_coor);
                         field_pts++;
+                        if (field_pts==4){
+                            alert("Finished clicking the field points");
+                            document.getElementById("field_coord").value=field_coor;
+                            field_pts++;
+                        }
+                            
                         }
                         else{
                             alert("You have already clicked 4 points");
-                            document.getElementById("field_coord").value=field_coor;
                         }
                     });
 
@@ -97,12 +113,26 @@
                         var top = Math.round( (e.clientY - offset_t) );
                         if (user_pts<4){
                         user_coor.push([left,top]);
+                        
+                        dot_marker = document.createElement("div");
+                        dot_marker.style.position = "absolute";
+                        dot_marker.style.width = "5px";
+                        dot_marker.style.height = "5px";
+                        dot_marker.style.backgroundColor = "red";
+                        dot_marker.style.left = left+"px";
+                        dot_marker.style.top = top+"px";
+                        document.getElementById("user-container").appendChild(dot_marker);
+                        
                         // alert("Left: "+user_coor);
                         user_pts++;
+                        if (user_pts==4){
+                            alert("Finished clicking the user points");
+                            document.getElementById("user_coord").value=user_coor;
+                            user_pts++;
+                        }
                         }
                         else{
                             alert("You have already clicked 4 points");
-                            document.getElementById("user_coord").value=user_coor;  
                         }
                        
                     });
